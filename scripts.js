@@ -1,4 +1,4 @@
-const DEFAULT_NAME = "testWidget";
+const INSTANCE_NAME = "testWidget";
 
 const loadApp = (url) => {
   const iframe = document.createElement('iframe');
@@ -16,13 +16,12 @@ const loadApp = (url) => {
   window.addEventListener("message", receiveMessage);
 };
 
-const loader = (win, scriptElement) => {
-    const instanceName = scriptElement?.attributes.getNamedItem('id')?.value ?? DEFAULT_NAME;
-    const instanceLoader = win[instanceName];
+const loader = (win) => {
+    const instanceLoader = win[INSTANCE_NAME];
     if (!instanceLoader || !instanceLoader.q) {
-        throw new Error(`Not found loader for [${instanceName}].`);
+        throw new Error(`Not found loader for [${INSTANCE_NAME}].`);
     }
-
+    
     // async init
     for (let i = 0; i < instanceLoader.q.length; i++) {
       const item = instanceLoader.q[i];
@@ -31,7 +30,7 @@ const loader = (win, scriptElement) => {
 
       switch (method) { 
         case 'init':
-          win[`loaded-${instanceName}`] = true;
+          win[`loaded-${INSTANCE_NAME}`] = true;
           loadApp(args.url);
           break;
         default:
@@ -40,7 +39,7 @@ const loader = (win, scriptElement) => {
     }
 
     // call 
-    win[instanceName] = (method, args) => {
+    win[INSTANCE_NAME] = (method, args) => {
       switch (method) {
         case 'init': {
           loadApp(args.url);
@@ -52,4 +51,4 @@ const loader = (win, scriptElement) => {
     };
 };
 
-loader(window, window.document.currentScript);
+loader(window);

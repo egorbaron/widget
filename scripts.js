@@ -1,19 +1,45 @@
 const INSTANCE_NAME = "testWidget";
+const APP_URL = "https://test-react-widget.vercel.app/";
 
-const loadApp = (url) => {
+const guid = () => {
+  var S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+};
+
+const loadApp = (payUrl) => {
   const iframe = document.createElement('iframe');
-  iframe.src = url;
+  const id = guid();
+  iframe.src = "http://localhost:3000/";
+  iframe.name = id;
   iframe.style.cssText = "height: 100% !important; width: 100% !important; position: fixed !important; border: 0px !important; inset: 0px !important; max-height: 100% important; z-index: 99999 !important";
-  document.body.appendChild(iframe);
+
   const receiveMessage = (e) => {
-    "close-iframe" == e.data && iframe.remove();
+    const type = e?.data?.test_widget?.type;
+    switch (type) {
+      case `close-iframe-${id}`:
+        window.removeEventListener("message", receiveMessage);
+        iframe.remove();
+        break;
+      case `get-data-${id}`:
+        iframe.contentWindow.postMessage(
+          {
+            test_widget: {
+              type: `send-data-${id}`,
+              data: {
+                payUrl,
+              }
+            },
+          },
+          APP_URL
+        );
+        break;
+      default:
+        console.warn(`Unsupported [${type}]`);
+    }
   }
-  iframe.onload = () => {
-    iframe.contentWindow.postMessage({
-      testData: "some data..."
-    }, "*");
-  };
+
   window.addEventListener("message", receiveMessage);
+  document.body.appendChild(iframe);
 };
 
 const loader = (win) => {

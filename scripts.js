@@ -9,7 +9,7 @@ const guid = () => {
 const loadApp = (payUrl) => {
   const iframe = document.createElement('iframe');
   const id = guid();
-  iframe.src = "http://localhost:3000/";
+  iframe.src = APP_URL;
   iframe.name = id;
   iframe.style.cssText = "height: 100% !important; width: 100% !important; position: fixed !important; border: 0px !important; inset: 0px !important; max-height: 100% important; z-index: 99999 !important";
 

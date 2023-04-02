@@ -1,14 +1,14 @@
 const INSTANCE_NAME = "testWidget";
 const APP_URL = "https://test-react-widget.vercel.app/";
+// const APP_URL = "http://localhost:3002/";
 
 const guid = () => {
   var S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 };
 
-const loadApp = (payUrl) => {
+const loadApp = (payUrl, id) => {
   const iframe = document.createElement('iframe');
-  const id = guid();
   iframe.src = APP_URL;
   iframe.name = id;
   iframe.style.cssText = "height: 100% !important; width: 100% !important; position: fixed !important; border: 0px !important; inset: 0px !important; max-height: 100% important; z-index: 99999 !important";
@@ -47,6 +47,8 @@ const loader = (win) => {
     if (!instanceLoader || !instanceLoader.q) {
         throw new Error(`Not found loader for [${INSTANCE_NAME}].`);
     }
+    win[`loaded-${INSTANCE_NAME}`] = true;
+    const id = guid();
     
     // async init
     for (let i = 0; i < instanceLoader.q.length; i++) {
@@ -56,8 +58,39 @@ const loader = (win) => {
 
       switch (method) { 
         case 'init':
-          win[`loaded-${INSTANCE_NAME}`] = true;
-          loadApp(args.url);
+          loadApp(args.url, id);
+          break;
+        case 'initWithButton':
+          const parent = args.parent;
+          const button = document.createElement("button");
+          const buttonID = `button-${id}`;
+          button.id = buttonID;
+          button.innerText = args.buttonText;
+
+          document.head.insertAdjacentHTML("beforeend", `
+            <style>
+              #${buttonID} {
+                background-color: #256aec;
+                border: none;
+                color: #ffffff;
+                padding: 8px 16px;
+                text-align: center;
+                font-size: 15px;
+                cursor: pointer;
+                outline: 0;
+                transition: all 0.2s ease-out;
+              }
+              #${buttonID}:hover {
+                opacity: 0.87;
+                transition: all 0.2s ease-out;
+              }
+            </style>
+          `);
+
+          button.addEventListener("click", () => testWidget("init", {
+            url: args.url,
+          }));
+          parent.append(button);
           break;
         default:
           console.warn(`Unsupported [${method}]`, args);
@@ -68,7 +101,7 @@ const loader = (win) => {
     win[INSTANCE_NAME] = (method, args) => {
       switch (method) {
         case 'init': {
-          loadApp(args.url);
+          loadApp(args.url, id);
           break;
         }
         default:

@@ -7,39 +7,46 @@ const guid = () => {
   return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 };
 
-const loadApp = (payUrl, id) => {
-  const iframe = document.createElement('iframe');
-  iframe.src = APP_URL;
-  iframe.name = id;
-  iframe.style.cssText = "height: 100% !important; width: 100% !important; position: fixed !important; border: 0px !important; inset: 0px !important; max-height: 100% important; z-index: 99999 !important";
+let appLoading;
 
-  const receiveMessage = (e) => {
-    const type = e?.data?.test_widget?.type;
-    switch (type) {
-      case `close-iframe-${id}`:
-        window.removeEventListener("message", receiveMessage);
-        iframe.remove();
-        break;
-      case `get-data-${id}`:
-        iframe.contentWindow.postMessage(
-          {
-            test_widget: {
-              type: `send-data-${id}`,
-              data: {
-                payUrl,
-              }
+const loadApp = async (payUrl, id) => {
+  if(!appLoading) {
+    appLoading = true;
+    const iframe = document.createElement('iframe');
+    iframe.src = APP_URL;
+    iframe.onload = () => {
+      appLoading = false;
+    };
+    iframe.name = id;
+    iframe.style.cssText = "height: 100% !important; width: 100% !important; position: fixed !important; border: 0px !important; inset: 0px !important; max-height: 100% important; z-index: 99999 !important";
+    const receiveMessage = (e) => {
+      const type = e?.data?.test_widget?.type;
+      switch (type) {
+        case `close-iframe-${id}`:
+          window.removeEventListener("message", receiveMessage);
+          iframe.remove();
+          break;
+        case `get-data-${id}`:
+          iframe.contentWindow.postMessage(
+            {
+              test_widget: {
+                type: `send-data-${id}`,
+                data: {
+                  payUrl,
+                }
+              },
             },
-          },
-          APP_URL
-        );
-        break;
-      default:
-        console.warn(`Unsupported [${type}]`);
+            APP_URL
+          );
+          break;
+        default:
+          console.warn(`Unsupported [${type}]`);
+      }
     }
-  }
 
-  window.addEventListener("message", receiveMessage);
-  document.body.appendChild(iframe);
+    window.addEventListener("message", receiveMessage);
+    document.body.appendChild(iframe);
+  }
 };
 
 const loader = (win) => {

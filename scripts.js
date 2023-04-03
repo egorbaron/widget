@@ -9,7 +9,7 @@ const guid = () => {
 
 let appLoading;
 
-const loadApp = async (payUrl, id) => {
+const loadApp = (payUrl, id) => {
   if(!appLoading) {
     appLoading = true;
     const iframe = document.createElement('iframe');
@@ -73,30 +73,33 @@ const loader = (win) => {
           const buttonID = `button-${id}`;
           button.id = buttonID;
           button.innerText = args.buttonText;
-
-          document.head.insertAdjacentHTML("beforeend", `
-            <style>
-              #${buttonID} {
-                background-color: #256aec;
-                border: none;
-                color: #ffffff;
-                padding: 8px 16px;
-                text-align: center;
-                font-size: 15px;
-                cursor: pointer;
-                outline: 0;
-                transition: all 0.2s ease-out;
-              }
-              #${buttonID}:hover {
-                opacity: 0.87;
-                transition: all 0.2s ease-out;
-              }
-            </style>
-          `);
-
-          button.addEventListener("click", () => testWidget("init", {
+          button.addEventListener("click", () => win[INSTANCE_NAME]("init", {
             url: args.url,
           }));
+
+          const style = document.querySelector(`style#style-${id}`);
+          if(!style) {
+            document.head.insertAdjacentHTML("beforeend", `
+              <style id=style-${id}>
+                #${buttonID} {
+                  background-color: #256aec;
+                  border: none;
+                  color: #ffffff;
+                  padding: 8px 16px;
+                  text-align: center;
+                  font-size: 15px;
+                  cursor: pointer;
+                  outline: 0;
+                  transition: all 0.2s ease-out;
+                }
+                #${buttonID}:hover {
+                  opacity: 0.87;
+                  transition: all 0.2s ease-out;
+                }
+              </style>
+            `);
+          }
+          
           parent.append(button);
           break;
         default:

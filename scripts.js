@@ -26,7 +26,7 @@ const loadApp = (payUrl, id) => {
       position: fixed !important;
       border: 0px !important; inset: 0px !important;
       max-height: 100% important;
-      z-index: 99999;
+      z-index: 99998 !important;
       background: rgba(33, 33, 58, 0.54);
     `;
     spinner.style.cssText = `

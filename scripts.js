@@ -12,10 +12,13 @@ let appLoading;
 const loadApp = (payUrl, id) => {
   if(!appLoading) {
     appLoading = true;
+    
+    const spinKeyframe = `spin-keyframe-${id}`;
+    const noScrollClass = `noscroll-${id}`;
+    document.body.classList.add(noScrollClass);
 
     const loadingDiv = document.createElement('div');
     const spinner = document.createElement('div');
-    const spinKeyframe = `spin-keyframe-${id}`;
 
     loadingDiv.style.cssText = `
       height: 100% !important; 
@@ -68,6 +71,7 @@ const loadApp = (payUrl, id) => {
           window.removeEventListener("message", receiveMessage);
           iframe.remove();
           loadingDiv.remove();
+          document.body.classList.remove(noScrollClass);
           break;
         case `get-data-${id}`:
           iframe.contentWindow.postMessage(
@@ -102,6 +106,7 @@ const loader = (win) => {
   const id = guid();
   const buttonID = `button-${id}`;
   const spinKeyframe = `spin-keyframe-${id}`;
+  const noScrollClass = `noscroll-${id}`
   
   // async init
   for (let i = 0; i < instanceLoader.q.length; i++) {
@@ -113,6 +118,9 @@ const loader = (win) => {
     if(!style) {
       document.head.insertAdjacentHTML("beforeend", `
         <style id=style-${id}>
+          .${noScrollClass} {
+            overflow: hidden;
+          }
           #${buttonID}:hover {
             opacity: 0.87;
             transition: all 0.2s ease-out;

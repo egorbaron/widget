@@ -1,6 +1,6 @@
 const INSTANCE_NAME = "testWidget";
-// const APP_URL = "https://test-react-widget.vercel.app/";
-const APP_URL = "http://localhost:4000/";
+const APP_URL = "https://test-react-widget.vercel.app/";
+// const APP_URL = "http://localhost:4000/";
 
 const guid = () => {
   var S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -88,7 +88,7 @@ const loadApp = (payUrl, id) => {
     }
     window.addEventListener("message", receiveMessage);
 
-    loadingDiv.append(spinner);
+    loadingDiv.appendChild(spinner);
     document.body.appendChild(loadingDiv);
     document.body.appendChild(iframe);
   };
@@ -97,7 +97,7 @@ const loadApp = (payUrl, id) => {
 const loader = (win) => {
   const instanceLoader = win[INSTANCE_NAME];
   if (!instanceLoader || !instanceLoader.q) {
-      throw new Error(`Not found loader for [${INSTANCE_NAME}].`);
+    throw new Error(`Not found loader for [${INSTANCE_NAME}].`);
   }
   const id = guid();
   const buttonID = `button-${id}`;
@@ -124,8 +124,7 @@ const loader = (win) => {
           };
         </style>
       `);
-    }
-        
+    };
 
     switch (method) { 
       case 'init':

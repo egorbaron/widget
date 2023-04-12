@@ -1,4 +1,4 @@
-const INSTANCE_NAME = "testWidget";
+const INSTANCE_NAME = "billingWidget";
 const APP_URL = "https://test-react-widget.vercel.app/";
 // const APP_URL = "http://localhost:4000/";
 
@@ -62,7 +62,7 @@ const loadApp = (payUrl, id) => {
     `;
 
     const receiveMessage = (e) => {
-      const type = e?.data?.test_widget?.type;
+      const type = e?.data?.billing_widget?.type;
       switch (type) {
         case `loaded-${id}`:
           spinner.remove();
@@ -76,7 +76,7 @@ const loadApp = (payUrl, id) => {
         case `get-data-${id}`:
           iframe.contentWindow.postMessage(
             {
-              test_widget: {
+              billing_widget: {
                 type: `send-data-${id}`,
                 data: {
                   payUrl,

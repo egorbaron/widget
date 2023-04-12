@@ -15,8 +15,8 @@
       if(!w[o]){ w[o] = function () { (w[o].q = w[o].q || []).push(arguments) };
       js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
       js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs)};
-      }(window, document, 'script', 'testWidget', './scripts.js'));
-      testWidget("init",{
+      }(window, document, 'script', 'billingWidget', './scripts.js'));
+      billingWidget("init",{
         url: "https://app.leadpay.ru/checkout/239/",
       });
     }
@@ -28,21 +28,21 @@
       if(!w[o]){ w[o] = function () { (w[o].q = w[o].q || []).push(arguments) };
       js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
       js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs)};
-      }(window, document, 'script', 'testWidget', './scripts.js'));
-      testWidget("initWithButton",{
+      }(window, document, 'script', 'billingWidget', './scripts.js'));
+      billingWidget("initWithButton",{
         url: "https://app.leadpay.ru/checkout/239/",
         buttonText: "Button",
         parent: document.currentScript.parentElement
       });
-      testWidget("initWithButton",{
+      billingWidget("initWithButton",{
         url: "https://app.leadpay.ru/checkout/239/3",
         buttonText: "Button",
         parent: document.currentScript.parentElement
       });
     </script> -->
   </div>
-  <button id="testWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
-  <button id="testWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <button id="billingWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <button id="billingWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
   <!-- <button id="testWidget" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button> -->
   <button onclick="load()">click</button>
   <button onclick="load()">click</button>

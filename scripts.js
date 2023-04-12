@@ -98,70 +98,42 @@ const loadApp = (payUrl, id) => {
   };
 };
 
-const loader = (win) => {
+const loader = (win, script) => {
   const instanceLoader = win[INSTANCE_NAME];
-  if (!instanceLoader || !instanceLoader.q) {
-    throw new Error(`Not found loader for [${INSTANCE_NAME}].`);
-  }
   const id = guid();
-  const buttonID = `button-${id}`;
   const spinKeyframe = `spin-keyframe-${id}`;
   const noScrollClass = `noscroll-${id}`
-  
-  // async init
-  for (let i = 0; i < instanceLoader.q.length; i++) {
-    const item = instanceLoader.q[i];
-    const method = item[0];
-    const args = item[1];
 
-    const style = document.querySelector(`style#style-${id}`);
-    if(!style) {
-      document.head.insertAdjacentHTML("beforeend", `
-        <style id=style-${id}>
-          .${noScrollClass} {
-            overflow: hidden;
+  const style = document.querySelector(`style#style-${id}`);
+  if (!style) {
+    document.head.insertAdjacentHTML("beforeend", `
+      <style id=style-${id}>
+        .${noScrollClass} {
+          overflow: hidden;
+        }
+        @keyframes ${spinKeyframe} {
+          to {
+            -webkit-transform: rotate(360deg);
           }
-          #${buttonID}:hover {
-            opacity: 0.87;
-            transition: all 0.2s ease-out;
-          }
-          @keyframes ${spinKeyframe} {
-            to {
-              -webkit-transform: rotate(360deg);
-            }
-          };
-        </style>
-      `);
-    };
+        };
+      </style>
+    `);
+  };
 
-    switch (method) { 
-      case 'init':
-        loadApp(args.url, id);
-        break;
-      case 'initWithButton':
-        const parent = args.parent;
-        const button = document.createElement("button");
-        button.id = buttonID;
-        button.style.cssText = `
-          background-color: #256aec;
-          border: none;
-          color: #ffffff;
-          padding: 8px 16px;
-          text-align: center;
-          font-size: 15px;
-          display: inline-block;
-          cursor: pointer;
-          outline: 0;
-          transition: all 0.2s ease-out;
-        `;
-        button.innerText = args.buttonText;
-        button.addEventListener("click", () => win[INSTANCE_NAME]("init", {
-          url: args.url,
-        }));
-        parent.append(button);
-        break;
-      default:
-        console.warn(`Unsupported [${method}]`, args);
+  if (instanceLoader?.q) {
+    // async init
+    for (let i = 0; i < instanceLoader?.q?.length; i++) {
+      const item = instanceLoader.q[i];
+      const method = item[0];
+      const args = item[1];
+
+      switch (method) {
+        case 'init':
+          loadApp(args.url, id);
+          break;
+        default:
+          console.warn(`Unsupported [${method}]`, args);
+      }
     }
   }
 
@@ -176,6 +148,20 @@ const loader = (win) => {
         console.warn(`Unsupported [${method}]`, args);
     }
   };
+
+  const staticElementsID = script.getAttribute("data-payment-id") || `${INSTANCE_NAME}ID`;
+  const staticElements = window.document.querySelectorAll(`[id=${staticElementsID}]`);
+  const scriptID = script.getAttribute("id");
+  if (staticElements.length && !scriptID) {
+    const DATA_URL_ATTR = "data-payment-url";
+    for (let i = 0; i < staticElements?.length; i++) {
+      const element = staticElements[i];
+      const url = element.getAttribute(DATA_URL_ATTR);
+      if (url) {
+        element.addEventListener("click", () => win[INSTANCE_NAME]("init", { url }));
+      }
+    }
+  }
 };
 
-loader(window);
+loader(window, document.currentScript);

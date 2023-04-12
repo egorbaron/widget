@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document main</title>
-</head>
+    <script src="./scripts.js" async></script>
+    </head>
 <body>
   <script>
     // //egorbaron.github.io/widget/scripts.js
@@ -16,13 +17,14 @@
       js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs)};
       }(window, document, 'script', 'testWidget', './scripts.js'));
       testWidget("init",{
-        url: "https://app.leadpay.ru/checkout/239/1",
+        url: "https://app.leadpay.ru/checkout/239/",
       });
     }
   </script>
   <div>
-    <script>
+    <!-- <script>
       (function (w, d, s, o, f, js, fjs) {
+        console.log(w[o], "w[o]");
       if(!w[o]){ w[o] = function () { (w[o].q = w[o].q || []).push(arguments) };
       js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
       js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs)};
@@ -37,8 +39,13 @@
         buttonText: "Button",
         parent: document.currentScript.parentElement
       });
-    </script>
+    </script> -->
   </div>
+  <button id="testWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <button id="testWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <!-- <button id="testWidget" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button> -->
+  <button onclick="load()">click</button>
+  <button onclick="load()">click</button>
   <button onclick="load()">click</button>
 </body>
 </html>

@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document main</title>
-    <script src="./scripts.js" async></script>
+    <script data-payment-id="billingWidget1" src="./scripts.js" async></script>
+    <script id="billingWidget12" data-payment-id="billingWidget3" src="./scripts.js" async></script>
     </head>
 <body>
   <script>
@@ -41,9 +42,19 @@
       });
     </script> -->
   </div>
-  <button id="billingWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
-  <button id="billingWidgetID" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <button id="billingWidget1" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
+  <button id="billingWidget3" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button>
   <!-- <button id="testWidget" data-payment-url="https://app.leadpay.ru/checkout/239/">click</button> -->
+  <!-- <script>
+    (function (w, d, s, o, f, js, fjs) {
+      if(!w[o]){ w[o] = function () { (w[o].q = w[o].q || []).push(arguments) };
+      js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
+      js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs)};
+      }(window, document, 'script', 'billingWidget', './scripts.js'));
+      billingWidget("init",{
+        url: "https://app.leadpay.ru/checkout/239/1",
+      });
+  </script> -->
   <button onclick="load()">click</button>
   <button onclick="load()">click</button>
   <button onclick="load()">click</button>
